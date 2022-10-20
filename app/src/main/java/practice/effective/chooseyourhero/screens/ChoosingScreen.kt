@@ -1,7 +1,11 @@
 package practice.effective.chooseyourhero.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -52,7 +56,7 @@ internal fun ChoosingScreen() {
             flingBehavior = rememberSnapperFlingBehavior(lazyListState),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val items = heroesViewModel.getHeroesList().toList()
+            val items = heroesViewModel.getHeroesList().toList().shuffled()
             items(items) { item ->
                 HeroCard(item, items.indexOf(item), layoutInfo)
             }
