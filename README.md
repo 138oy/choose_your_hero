@@ -12,7 +12,7 @@ full readme coming soon!
 ### Theiming
 
 ## Topics
-1. Animation
+1. Jetpack Compose
 
 ## How to run
 

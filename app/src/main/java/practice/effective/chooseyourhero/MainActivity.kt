@@ -6,10 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import practice.effective.chooseyourhero.screens.ChoosingScreen
 import practice.effective.chooseyourhero.ui.theme.ChooseYourHeroTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,22 +23,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    ChoosingScreen()
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ChooseYourHeroTheme {
-        Greeting("Android")
-    }
+    @Preview
+    @Composable
+    fun Show() = ChoosingScreen()
 }

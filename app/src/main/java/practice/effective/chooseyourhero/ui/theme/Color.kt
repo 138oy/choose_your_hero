@@ -1,8 +1,11 @@
 package practice.effective.chooseyourhero.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import practice.effective.chooseyourhero.R
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val Purple200 = Color(R.color.purple_200)
+val Purple500 = Color(R.color.purple_500)
+val Purple700 = Color(R.color.purple_700)
+val Teal200 = Color(R.color.teal_200)
+val DarkGray = Color(R.color.darkGray)
+val LighterGray = Color(R.color.lighterGay)
