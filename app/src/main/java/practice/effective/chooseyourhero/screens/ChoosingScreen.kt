@@ -1,9 +1,9 @@
 package practice.effective.chooseyourhero.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
@@ -30,8 +31,13 @@ import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
-internal fun ChoosingScreen() {
-    val heroesViewModel = HeroesViewModel()
+internal fun ChoosingScreen(
+    onHeroClick: (String) -> Unit = {},
+    heroesViewModel: HeroesViewModel = viewModel()
+) {
+    val lazyListState = rememberLazyListState()
+    val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
+    val items = heroesViewModel.getHeroesList()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.marvel),
@@ -48,19 +54,15 @@ internal fun ChoosingScreen() {
             color = Color.White
         )
 
-        val lazyListState = rememberLazyListState()
-        val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
         LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
+            modifier = Modifier.fillMaxSize(),
             state = lazyListState,
             flingBehavior = rememberSnapperFlingBehavior(lazyListState),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(15.dp),
         ) {
-            val items = heroesViewModel.getHeroesList().toList().shuffled()
             items(items) { item ->
-                HeroCard(item, items.indexOf(item), layoutInfo)
+                HeroCard(item, items.indexOf(item), layoutInfo, onHeroClick)
             }
         }
     }

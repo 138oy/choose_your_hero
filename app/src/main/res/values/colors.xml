@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darkGray">#29323c</color>
     <color name="lighterGay">#485563</color>
+    <color name="red">#E52424</color>
+    <color name="blue">#3024E5</color>
+    <color name="yellow">#E5C824</color>
 </resources>
