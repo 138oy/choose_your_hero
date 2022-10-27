@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import practice.effective.chooseyourhero.navigation.ChoosingAHero
@@ -18,7 +17,6 @@ class MainActivity : ComponentActivity() {
                 val appState = rememberAppState()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
                 ) {
                     ChooseYourHeroNavHost(
                         navController = appState.navController,

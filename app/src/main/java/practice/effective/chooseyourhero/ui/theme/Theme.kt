@@ -5,23 +5,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 
-//to do: change architecture
 private val DarkColorPalette = darkColors(
-    primary = DarkGray,
-    primaryVariant = Purple700,
-    secondary = LighterGray,
-    background = Color.Black,
-
+    primary = primary,
+    primaryVariant = primaryDark,
+    secondary = secondary,
+    secondaryVariant = secondaryDark,
+    surface = primary,
 )
 
 private val LightColorPalette = lightColors(
-    primary = DarkGray,
-    primaryVariant = Purple700,
-    secondary = LighterGray,
-    background = Color.Black,
+    primary = primary,
+    primaryVariant = primaryLight,
+    secondary = secondary,
+    secondaryVariant = secondaryLight,
+    surface = primary,
 )
 
 @Composable

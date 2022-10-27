@@ -1,9 +1,8 @@
 package practice.effective.chooseyourhero.repositories
 
-import java.util.UUID
 import practice.effective.chooseyourhero.models.Hero
 
-class HeroesRepository() {
+class HeroesRepository {
     private var heroesList: List<Hero> = listOf(
         Hero(
             "e5eea456-0d51-47ec-841d-e834569c1034", "Apocalypse", "I'm En Sabah Nur",
@@ -30,7 +29,9 @@ class HeroesRepository() {
             "https://wikicomics.ru/uploads/posts/2020-08/1597089673_peggi-karter-peggy-carter-margaret-peggi-karter.jpg"
         ),
         Hero(
-            "c2ec292a-3c9f-4710-946a-a4827b6ca553", "Scarlet Witch", "I'm Wanda Maximoff",
+            "c2ec292a-3c9f-4710-946a-a4827b6ca553",
+            "Scarlet Witch",
+            "I'm Wanda MaximoffI'm Wanda MaximoffI'm Wanda MaximoffI'm Wanda MaximoffI'm Wanda Maximoff",
             "https://wikicomics.ru/uploads/posts/2020-08/1597203769_alaya-vedma-scarlet-witch-vanda-maksimoff.jpg"
         ),
         Hero(
