@@ -11,8 +11,9 @@ full readme coming soon!
 
 ### Theiming
 
-## Topics
+## Topics of labs
 1. Jetpack Compose
+2. Navigation
 
 ## How to run
 

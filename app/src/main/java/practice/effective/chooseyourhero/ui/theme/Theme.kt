@@ -10,18 +10,19 @@ import androidx.compose.ui.graphics.Color
 
 //to do: change architecture
 private val DarkColorPalette = darkColors(
-    primary = DarkGray,
-    primaryVariant = Purple700,
-    secondary = LighterGray,
-    background = Color.Black,
-
+    primary = primary,
+    primaryVariant = primaryDark,
+    secondary = secondary,
+    secondaryVariant = secondaryDark,
+    surface = primary,
 )
 
 private val LightColorPalette = lightColors(
-    primary = DarkGray,
-    primaryVariant = Purple700,
-    secondary = LighterGray,
-    background = Color.Black,
+    primary = primary,
+    primaryVariant = primaryLight,
+    secondary = secondary,
+    secondaryVariant = secondaryLight,
+    surface = primary,
 )
 
 @Composable
