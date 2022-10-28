@@ -21,7 +21,9 @@ import coil.request.ImageRequest
 import coil.size.Size
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
+import practice.effective.chooseyourhero.AppState
 import practice.effective.chooseyourhero.models.Hero
+import practice.effective.chooseyourhero.navigation.HeroInfo
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
@@ -29,13 +31,18 @@ internal fun HeroCard(
     hero: Hero,
     itemIndex: Int,
     layoutInfo: LazyListSnapperLayoutInfo,
-    onHeroClick: (String) -> Unit = {},
+    appState: AppState,
+    modifier: Modifier = Modifier,
 ) {
-    val modifier: Modifier = if (itemIndex == layoutInfo.currentItem?.index)
-        Modifier.size(width = 350.dp, height = 525.dp)
-    else Modifier.size(width = 300.dp, height = 450.dp)
+    val cardModifier = if (itemIndex == layoutInfo.currentItem?.index) modifier.size(
+        width = 350.dp,
+        height = 525.dp
+    )
+    else modifier.size(width = 300.dp, height = 450.dp)
 
-    Card(modifier = modifier.clickable(onClick = { onHeroClick(hero.id) })) {
+    Card(modifier = cardModifier
+        .clickable(onClick = { appState.navigateSingleTopTo("${HeroInfo.route}/${hero.id}") })
+    ) {
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(
                 LocalContext.current
@@ -62,7 +69,7 @@ internal fun HeroCard(
 
         Box(contentAlignment = Alignment.BottomStart) {
             Text(
-                modifier = Modifier.padding(10.dp),
+                modifier = modifier.padding(10.dp),
                 text = hero.name,
                 style = MaterialTheme.typography.h2,
             )

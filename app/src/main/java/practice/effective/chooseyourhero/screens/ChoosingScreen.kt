@@ -22,15 +22,17 @@ import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
+import practice.effective.chooseyourhero.AppState
 import practice.effective.chooseyourhero.R
 import practice.effective.chooseyourhero.ui.components.HeroCard
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
-internal fun ChoosingScreen(
-    onHeroClick: (String) -> Unit = {},
-    heroesViewModel: HeroesViewModel = viewModel()
+fun ChoosingScreen(
+    appState: AppState,
+    heroesViewModel: HeroesViewModel = viewModel(),
+    modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
     val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
@@ -39,7 +41,7 @@ internal fun ChoosingScreen(
         Image(
             painter = painterResource(R.drawable.marvel),
             contentDescription = "",
-            modifier = Modifier
+            modifier = modifier
                 .padding(vertical = 5.dp)
                 .size(150.dp),
         )
@@ -49,14 +51,14 @@ internal fun ChoosingScreen(
         )
 
         LazyRow(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             state = lazyListState,
             flingBehavior = rememberSnapperFlingBehavior(lazyListState),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(15.dp),
         ) {
             items(items) { item ->
-                HeroCard(item, items.indexOf(item), layoutInfo, onHeroClick)
+                HeroCard(item, items.indexOf(item), layoutInfo, appState)
             }
         }
     }

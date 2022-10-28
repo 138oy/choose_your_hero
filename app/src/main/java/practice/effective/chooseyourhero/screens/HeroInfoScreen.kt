@@ -30,10 +30,14 @@ import coil.size.Size
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @Composable
-internal fun HeroInfoScreen(onBackClick: () -> Unit = {}, heroId: String?) {
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit = {},
+    heroId: String?,
+    modifier: Modifier = Modifier
+) {
     val heroesViewModel: HeroesViewModel = viewModel()
     val hero = remember(heroId) { heroesViewModel.getHeroesList().find { it.id == heroId } }
-    Card(modifier = Modifier.fillMaxSize()) {
+    Card(modifier = modifier.fillMaxSize()) {
         if (hero != null) {
             val painter = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(
@@ -47,7 +51,7 @@ internal fun HeroInfoScreen(onBackClick: () -> Unit = {}, heroId: String?) {
                 is AsyncImagePainter.State.Loading -> {
                     Box {
                         CircularProgressIndicator(
-                            modifier = Modifier
+                            modifier = modifier
                                 .size(20.dp)
                                 .align(Alignment.Center)
                         )
@@ -71,7 +75,7 @@ internal fun HeroInfoScreen(onBackClick: () -> Unit = {}, heroId: String?) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
             }
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .padding(10.dp)
                     .align(Alignment.BottomStart)
             ) {

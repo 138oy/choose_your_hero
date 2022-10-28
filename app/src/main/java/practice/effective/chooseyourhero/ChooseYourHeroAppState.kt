@@ -10,7 +10,9 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun rememberAppState(navController: NavHostController = rememberNavController()):
-        AppState { return remember(navController) { AppState(navController) } }
+        AppState {
+    return remember(navController) { AppState(navController) }
+}
 
 class AppState(val navController: NavHostController) {
     val currentDestination: NavDestination?

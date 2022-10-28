@@ -20,7 +20,7 @@ fun ChooseYourHeroNavHost(
         startDestination = startDestination,
     ) {
         composable(route = ChoosingAHero.route) {
-            ChoosingScreen(onHeroClick = { heroId -> appState.navigateSingleTopTo("${HeroInfo.route}/$heroId") })
+            ChoosingScreen(appState)
         }
         composable(
             route = "${HeroInfo.route}/{${HeroInfo.heroIdArg}}",
