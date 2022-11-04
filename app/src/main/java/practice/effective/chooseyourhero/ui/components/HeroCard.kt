@@ -14,6 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -31,7 +34,7 @@ internal fun HeroCard(
     hero: Hero,
     itemIndex: Int,
     layoutInfo: LazyListSnapperLayoutInfo,
-    appState: AppState,
+    navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     val cardModifier = if (itemIndex == layoutInfo.currentItem?.index) modifier.size(
@@ -41,7 +44,15 @@ internal fun HeroCard(
     else modifier.size(width = 300.dp, height = 450.dp)
 
     Card(modifier = cardModifier
-        .clickable(onClick = { appState.navigateSingleTopTo("${HeroInfo.route}/${hero.id}") })
+        .clickable(onClick = { navController.navigate("${HeroInfo.route}/${hero.id}") {
+            popUpTo(
+                navController.graph.findStartDestination().id
+            ) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }})
     ) {
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(

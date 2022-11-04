@@ -20,7 +20,7 @@ fun ChooseYourHeroNavHost(
         startDestination = startDestination,
     ) {
         composable(route = ChoosingAHero.route) {
-            ChoosingScreen(appState)
+            ChoosingScreen(navController)
         }
         composable(
             route = "${HeroInfo.route}/{${HeroInfo.heroIdArg}}",

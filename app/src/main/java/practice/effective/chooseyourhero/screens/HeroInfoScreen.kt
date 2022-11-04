@@ -33,40 +33,38 @@ import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 internal fun HeroInfoScreen(
     onBackClick: () -> Unit = {},
     heroId: String?,
+    heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val heroesViewModel: HeroesViewModel = viewModel()
-    val hero = remember(heroId) { heroesViewModel.getHeroesList().find { it.id == heroId } }
+    val hero = remember(heroId) { heroesViewModel.getHero(heroId!!) }
     Card(modifier = modifier.fillMaxSize()) {
-        if (hero != null) {
-            val painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(
-                    LocalContext.current
-                )
-                    .data(hero.imageUrl)
-                    .size(Size.ORIGINAL).build()
+        val painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(
+                LocalContext.current
             )
+                .data(hero.imageUrl)
+                .size(Size.ORIGINAL).build()
+        )
 
-            when (painter.state) {
-                is AsyncImagePainter.State.Loading -> {
-                    Box {
-                        CircularProgressIndicator(
-                            modifier = modifier
-                                .size(20.dp)
-                                .align(Alignment.Center)
-                        )
-                    }
-                }
-                is AsyncImagePainter.State.Error -> {
-                    Text(text = "Oops something went wrong. Try again!")
-                }
-                else -> {
-                    AsyncImage(
-                        model = painter.request.data,
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
+        when (painter.state) {
+            is AsyncImagePainter.State.Loading -> {
+                Box {
+                    CircularProgressIndicator(
+                        modifier = modifier
+                            .size(20.dp)
+                            .align(Alignment.Center)
                     )
                 }
+            }
+            is AsyncImagePainter.State.Error -> {
+                Text(text = "Oops something went wrong. Try again!")
+            }
+            else -> {
+                AsyncImage(
+                    model = painter.request.data,
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
             }
         }
 
@@ -80,11 +78,11 @@ internal fun HeroInfoScreen(
                     .align(Alignment.BottomStart)
             ) {
                 Text(
-                    text = hero?.name ?: "error",
+                    text = hero.name,
                     style = MaterialTheme.typography.h2,
                 )
                 Text(
-                    text = hero?.description ?: "error",
+                    text = hero.description,
                     style = MaterialTheme.typography.body1,
                 )
             }

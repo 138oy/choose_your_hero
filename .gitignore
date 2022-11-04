@@ -17,3 +17,4 @@ local.properties
 /.idea/
 gradlew.bat
 gradlew
+/app/src/main/java/practice/effective/chooseyourhero/network/apikey.kt

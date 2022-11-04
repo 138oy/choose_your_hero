@@ -18,11 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-import practice.effective.chooseyourhero.AppState
 import practice.effective.chooseyourhero.R
 import practice.effective.chooseyourhero.ui.components.HeroCard
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
@@ -30,7 +30,7 @@ import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun ChoosingScreen(
-    appState: AppState,
+    navController: NavHostController,
     heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ) {
@@ -58,7 +58,7 @@ fun ChoosingScreen(
             horizontalArrangement = Arrangement.spacedBy(15.dp),
         ) {
             items(items) { item ->
-                HeroCard(item, items.indexOf(item), layoutInfo, appState)
+                HeroCard(item, items.indexOf(item), layoutInfo, navController)
             }
         }
     }
