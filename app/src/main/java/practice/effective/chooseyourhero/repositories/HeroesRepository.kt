@@ -6,12 +6,14 @@ import kotlinx.coroutines.flow.flow
 import practice.effective.chooseyourhero.network.MarvelApi
 import practice.effective.chooseyourhero.network.dtos.HeroDto
 
+private const val DELAY: Long = 10
+
 class HeroesRepository(private val api: MarvelApi = MarvelApi) {
     internal fun getHeroesList(): Flow<List<HeroDto>> {
         val res: Flow<List<HeroDto>> = flow {
             val response = api.retrofitService.getAllHeroes().data.results
             emit(response)
-            delay(10)
+            delay(DELAY)
         }
         return res
     }
@@ -20,7 +22,7 @@ class HeroesRepository(private val api: MarvelApi = MarvelApi) {
         val res: Flow<HeroDto> = flow {
             val response = api.retrofitService.getHeroById(id).data.results.single()
             emit(response)
-            delay(100)
+            delay(DELAY)
         }
         return res
     }
