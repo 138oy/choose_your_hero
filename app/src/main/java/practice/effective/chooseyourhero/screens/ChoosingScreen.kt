@@ -37,6 +37,7 @@ fun ChoosingScreen(
     val lazyListState = rememberLazyListState()
     val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
     val items = heroesViewModel.getHeroesList()
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.marvel),
@@ -51,7 +52,8 @@ fun ChoosingScreen(
         )
 
         LazyRow(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize(),
             state = lazyListState,
             flingBehavior = rememberSnapperFlingBehavior(lazyListState),
             verticalAlignment = Alignment.CenterVertically,

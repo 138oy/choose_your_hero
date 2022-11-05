@@ -1,8 +1,10 @@
 package practice.effective.chooseyourhero.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
@@ -74,14 +76,19 @@ internal fun HeroInfoScreen(
             }
             Column(
                 modifier = modifier
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .padding(15.dp)
                     .align(Alignment.BottomStart)
+                    .background(MaterialTheme.colors.primary)
             ) {
                 Text(
+                    modifier = modifier.padding(5.dp),
                     text = hero.name,
                     style = MaterialTheme.typography.h2,
                 )
+
                 Text(
+                    modifier = modifier.padding(5.dp),
                     text = hero.description,
                     style = MaterialTheme.typography.body1,
                 )

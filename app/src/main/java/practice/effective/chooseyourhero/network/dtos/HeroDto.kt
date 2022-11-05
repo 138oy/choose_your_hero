@@ -10,7 +10,7 @@ data class HeroDto(
     @Json(name = "name")
     val name: String,
     @Json(name = "description")
-    val description: String?,
+    val description: String,
     @Json(name = "thumbnail")
     val thumbnail: ImageDto,
 )

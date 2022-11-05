@@ -9,7 +9,13 @@ android {
     namespace 'practice.effective.chooseyourhero'
     compileSdk 33
 
+    def apikeyPropertiesFile = rootProject.file("apikey.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
     defaultConfig {
+        buildConfigField("String", "PUBLIC_KEY", apikeyProperties['publicKey'])
+        buildConfigField("String", "PRIVATE_KEY", apikeyProperties['privateKey'])
+        buildConfigField("String", "HASH", apikeyProperties['hash'])
         applicationId "practice.effective.chooseyourhero"
         minSdk 21
         targetSdk 33
