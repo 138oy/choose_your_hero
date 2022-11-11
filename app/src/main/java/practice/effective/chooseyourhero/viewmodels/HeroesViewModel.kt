@@ -20,8 +20,10 @@ import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.network.dtos.HeroDto
 import practice.effective.chooseyourhero.repositories.HeroesRepository
 
+const val DELAY: Long = 300
+
 class HeroesViewModel(private val repository: HeroesRepository = HeroesRepository()) : ViewModel() {
-    val _singleHero = MutableStateFlow<Flow<Hero>>(flow{emit(Hero("", "", "", ""))})
+    private val _singleHero = MutableStateFlow<Flow<Hero>>(flow{emit(Hero("", "", "", ""))})
     val singleHero = _singleHero.asSharedFlow()
 
     internal fun getHeroesList(): List<Hero> {
@@ -35,7 +37,7 @@ class HeroesViewModel(private val repository: HeroesRepository = HeroesRepositor
 
     @OptIn(FlowPreview::class)
     internal fun getHero(id: String) {
-        val res = repository.getHero(id).debounce(300).distinctUntilChanged()
+        val res = repository.getHero(id).debounce(DELAY).distinctUntilChanged()
             .map { elem -> mapDtoToEntity(elem) }
         _singleHero.update { res }
 

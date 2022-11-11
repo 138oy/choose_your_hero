@@ -1,6 +1,5 @@
 package practice.effective.chooseyourhero.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,8 +30,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import kotlinx.coroutines.flow.toCollection
-import kotlinx.coroutines.flow.toList
 import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
@@ -46,13 +42,15 @@ internal fun HeroInfoScreen(
     heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-
-    val isFetched = false
+//    val isFetched = false
 //    val hero = remember(heroId) { heroesViewModel.getHero(heroId!!) }
     heroesViewModel.getHero(heroId!!)
-
     LaunchedEffect(Unit) {
-        heroesViewModel.singleHero.collect{elem -> elem.collect{entity -> heroData[0] = entity}}
+        heroesViewModel.singleHero.collect { elem ->
+            elem.collect { entity ->
+                heroData[0] = entity
+            }
+        }
     }
     Card(modifier = modifier.fillMaxSize()) {
         val hero = heroData.single()
@@ -63,7 +61,6 @@ internal fun HeroInfoScreen(
                 .data(hero.imageUrl)
                 .size(Size.ORIGINAL).build()
         )
-
         when (painter.state) {
             is AsyncImagePainter.State.Loading -> {
                 Box {
