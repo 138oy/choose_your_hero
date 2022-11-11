@@ -1,5 +1,6 @@
 package practice.effective.chooseyourhero.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,67 +43,76 @@ internal fun HeroInfoScreen(
     heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-//    val isFetched = false
 //    val hero = remember(heroId) { heroesViewModel.getHero(heroId!!) }
     heroesViewModel.getHero(heroId!!)
     LaunchedEffect(Unit) {
-        heroesViewModel.singleHero.value.collect { elem ->
+        heroesViewModel.singleHero.value.heroesFlow.collect { elem ->
             heroData[0] = elem
         }
     }
     Card(modifier = modifier.fillMaxSize()) {
         val hero = heroData.single()
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(
-                LocalContext.current
+        if (!heroesViewModel.heroIsFetched()) {
+            Box {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        } else {
+            val painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(
+                    LocalContext.current
+                )
+                    .data(hero.imageUrl)
+                    .size(Size.ORIGINAL).build()
             )
-                .data(hero.imageUrl)
-                .size(Size.ORIGINAL).build()
-        )
-        when (painter.state) {
-            is AsyncImagePainter.State.Loading -> {
-                Box {
-                    CircularProgressIndicator(
-                        modifier = modifier
-                            .size(20.dp)
-                            .align(Alignment.Center)
+            when (painter.state) {
+                is AsyncImagePainter.State.Loading -> {
+                    Box {
+                        CircularProgressIndicator(
+                            modifier = modifier
+                                .size(20.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+                is AsyncImagePainter.State.Error -> {
+                    Text(text = "Oops something went wrong. Try again!")
+                }
+                else -> {
+                    AsyncImage(
+                        model = painter.request.data,
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop
                     )
                 }
             }
-            is AsyncImagePainter.State.Error -> {
-                Text(text = "Oops something went wrong. Try again!")
-            }
-            else -> {
-                AsyncImage(
-                    model = painter.request.data,
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop
-                )
-            }
-        }
 
-        Box {
-            IconButton(onClick = onBackClick) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
-            }
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .align(Alignment.BottomStart)
-                    .background(MaterialTheme.colors.primary)
-            ) {
-                Text(
-                    modifier = modifier.padding(5.dp),
-                    text = hero.name,
-                    style = MaterialTheme.typography.h2,
-                )
+            Box {
+                IconButton(onClick = onBackClick) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
+                }
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                        .align(Alignment.BottomStart)
+                        .background(MaterialTheme.colors.primary)
+                ) {
+                    Text(
+                        modifier = modifier.padding(5.dp),
+                        text = hero.name,
+                        style = MaterialTheme.typography.h2,
+                    )
 
-                Text(
-                    modifier = modifier.padding(5.dp),
-                    text = hero.description,
-                    style = MaterialTheme.typography.body1,
-                )
+                    Text(
+                        modifier = modifier.padding(5.dp),
+                        text = hero.description,
+                        style = MaterialTheme.typography.body1,
+                    )
+                }
             }
         }
     }

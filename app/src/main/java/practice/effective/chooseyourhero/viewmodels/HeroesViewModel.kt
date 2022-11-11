@@ -8,18 +8,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.network.dtos.HeroDto
 import practice.effective.chooseyourhero.repositories.HeroesRepository
+import practice.effective.chooseyourhero.ui.HeroUiState
 
 const val DELAY: Long = 300
 
 class HeroesViewModel(private val repository: HeroesRepository = HeroesRepository()) : ViewModel() {
-    private val _singleHero = MutableStateFlow(flow { emit(Hero("", "", "", "")) })
+    private val _singleHero = MutableStateFlow(HeroUiState.Empty)
     val singleHero = _singleHero.asStateFlow()
 
     internal fun getHeroesList(): List<Hero> {
@@ -33,9 +33,11 @@ class HeroesViewModel(private val repository: HeroesRepository = HeroesRepositor
 
     @OptIn(FlowPreview::class)
     internal fun getHero(id: String) {
-        val res = repository.getHero(id).debounce(DELAY).distinctUntilChanged()
-            .map { elem -> mapDtoToEntity(elem) }
-        _singleHero.update { res }
+        viewModelScope.launch {
+            val res = repository.getHero(id).debounce(DELAY).distinctUntilChanged()
+                .map { elem -> mapDtoToEntity(elem) }
+            _singleHero.update { it.copy(isFetched = true, heroesFlow = res) }
+        }
 
 //        val hero: MutableList<Hero> = mutableStateListOf()
 //        viewModelScope.launch {
@@ -46,6 +48,10 @@ class HeroesViewModel(private val repository: HeroesRepository = HeroesRepositor
 //            }
 //        }
 //        return hero.single()
+    }
+
+    internal fun heroIsFetched(): Boolean {
+        return singleHero.value.isFetched
     }
 
     private fun mapDtoToEntity(dto: HeroDto): Hero {
