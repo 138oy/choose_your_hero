@@ -6,7 +6,7 @@ import practice.effective.chooseyourhero.network.MarvelApi
 import practice.effective.chooseyourhero.network.dtos.HeroDto
 
 class HeroesRepository(private val api: MarvelApi = MarvelApi) {
-    internal suspend fun getHeroesList(): Flow<List<HeroDto>> {
+    internal fun getHeroesList(): Flow<List<HeroDto>> {
         val res: Flow<List<HeroDto>> = flow {
             val response = api.retrofitService.getAllHeroes().data.results
             emit(response)

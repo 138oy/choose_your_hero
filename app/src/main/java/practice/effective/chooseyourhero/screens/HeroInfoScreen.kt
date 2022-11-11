@@ -1,6 +1,5 @@
 package practice.effective.chooseyourhero.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,8 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,27 +30,29 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import practice.effective.chooseyourhero.models.Hero
+import practice.effective.chooseyourhero.ui.HeroUiState
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
-
-val heroData: MutableList<Hero> = mutableStateListOf(Hero("", "", "", ""))
 
 @Composable
 internal fun HeroInfoScreen(
-    onBackClick: () -> Unit = {},
+    onBackClick: () -> Unit,
     heroId: String?,
     heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-//    val hero = remember(heroId) { heroesViewModel.getHero(heroId!!) }
     heroesViewModel.getHero(heroId!!)
-    LaunchedEffect(Unit) {
-        heroesViewModel.singleHero.value.heroesFlow.collect { elem ->
-            heroData[0] = elem
-        }
-    }
-    Card(modifier = modifier.fillMaxSize()) {
-        val hero = heroData.single()
-        if (!heroesViewModel.heroIsFetched()) {
+    val state = heroesViewModel.state.collectAsState()
+    HeroInfoScreen(onBackClick, state.value, modifier)
+}
+
+@Composable
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit,
+    state: HeroUiState,
+    modifier: Modifier = Modifier
+) {
+    when (state) {
+        is HeroUiState.Loading -> {
             Box {
                 CircularProgressIndicator(
                     modifier = modifier
@@ -60,59 +60,84 @@ internal fun HeroInfoScreen(
                         .align(Alignment.Center)
                 )
             }
-        } else {
-            val painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(
-                    LocalContext.current
+        }
+
+        is HeroUiState.Empty -> {
+            Box {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
                 )
-                    .data(hero.imageUrl)
-                    .size(Size.ORIGINAL).build()
+            }
+        }
+
+        is HeroUiState.HeroesData -> {
+            HeroInfoScreen(onBackClick, state.heroesData.single())
+        }
+    }
+}
+
+
+@Composable
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit,
+    hero: Hero,
+    modifier: Modifier = Modifier
+) {
+
+    Card(modifier = modifier.fillMaxSize()) {
+        val painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(
+                LocalContext.current
             )
-            when (painter.state) {
-                is AsyncImagePainter.State.Loading -> {
-                    Box {
-                        CircularProgressIndicator(
-                            modifier = modifier
-                                .size(20.dp)
-                                .align(Alignment.Center)
-                        )
-                    }
-                }
-                is AsyncImagePainter.State.Error -> {
-                    Text(text = "Oops something went wrong. Try again!")
-                }
-                else -> {
-                    AsyncImage(
-                        model = painter.request.data,
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
+                .data(hero.imageUrl)
+                .size(Size.ORIGINAL).build()
+        )
+        when (painter.state) {
+            is AsyncImagePainter.State.Loading -> {
+                Box {
+                    CircularProgressIndicator(
+                        modifier = modifier
+                            .size(20.dp)
+                            .align(Alignment.Center)
                     )
                 }
             }
+            is AsyncImagePainter.State.Error -> {
+                Text(text = "Oops something went wrong. Try again!")
+            }
+            else -> {
+                AsyncImage(
+                    model = painter.request.data,
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
 
-            Box {
-                IconButton(onClick = onBackClick) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
-                }
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(15.dp)
-                        .align(Alignment.BottomStart)
-                        .background(MaterialTheme.colors.primary)
-                ) {
-                    Text(
-                        modifier = modifier.padding(5.dp),
-                        text = hero.name,
-                        style = MaterialTheme.typography.h2,
-                    )
+        Box {
+            IconButton(onClick = onBackClick) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
+            }
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+                    .align(Alignment.BottomStart)
+                    .background(MaterialTheme.colors.primary)
+            ) {
+                Text(
+                    modifier = modifier.padding(5.dp),
+                    text = hero.name,
+                    style = MaterialTheme.typography.h2,
+                )
 
-                    Text(
-                        modifier = modifier.padding(5.dp),
-                        text = hero.description,
-                        style = MaterialTheme.typography.body1,
-                    )
-                }
+                Text(
+                    modifier = modifier.padding(5.dp),
+                    text = hero.description,
+                    style = MaterialTheme.typography.body1,
+                )
             }
         }
     }
