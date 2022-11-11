@@ -46,10 +46,8 @@ internal fun HeroInfoScreen(
 //    val hero = remember(heroId) { heroesViewModel.getHero(heroId!!) }
     heroesViewModel.getHero(heroId!!)
     LaunchedEffect(Unit) {
-        heroesViewModel.singleHero.collect { elem ->
-            elem.collect { entity ->
-                heroData[0] = entity
-            }
+        heroesViewModel.singleHero.value.collect { elem ->
+            heroData[0] = elem
         }
     }
     Card(modifier = modifier.fillMaxSize()) {
