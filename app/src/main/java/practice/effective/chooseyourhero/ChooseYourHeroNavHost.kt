@@ -5,8 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import practice.effective.chooseyourhero.navigation.ChoosingAHero
+import practice.effective.chooseyourhero.navigation.ErrorMessage
 import practice.effective.chooseyourhero.navigation.HeroInfo
 import practice.effective.chooseyourhero.screens.ChoosingScreen
+import practice.effective.chooseyourhero.screens.ErrorScreen
 import practice.effective.chooseyourhero.screens.HeroInfoScreen
 
 @Composable
@@ -28,6 +30,9 @@ fun ChooseYourHeroNavHost(
         ) { navBackStackEntry ->
             val heroId = navBackStackEntry.arguments?.getString(HeroInfo.heroIdArg)
             HeroInfoScreen(onBackClick = { appState.onGoBack() }, heroId)
+        }
+        composable(route = ErrorMessage.route) {
+            ErrorScreen()
         }
     }
 }

@@ -19,3 +19,7 @@ object HeroInfo : AppDestination {
         navArgument(heroIdArg) { type = NavType.StringType }
     )
 }
+
+object ErrorMessage : AppDestination {
+    override val route = "error"
+}

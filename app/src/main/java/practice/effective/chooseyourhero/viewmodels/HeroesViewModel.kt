@@ -1,14 +1,17 @@
 package practice.effective.chooseyourhero.viewmodels
 
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import practice.effective.chooseyourhero.models.Hero
+import practice.effective.chooseyourhero.navigation.ErrorMessage
+import practice.effective.chooseyourhero.network.ResponseWrapper
 import practice.effective.chooseyourhero.network.dtos.HeroDto
 import practice.effective.chooseyourhero.repositories.HeroesRepository
 import practice.effective.chooseyourhero.ui.HeroUiState
@@ -17,13 +20,17 @@ class HeroesViewModel(private val repository: HeroesRepository = HeroesRepositor
     private val _state = MutableStateFlow<HeroUiState>(HeroUiState.Empty)
     val state = _state.asStateFlow()
 
-    internal fun getHeroesList() {
+    internal fun getHeroesList(navController: NavController) {
         viewModelScope.launch {
-            val res = repository.getHeroesList()
-                .map { list ->
-                    list.map { elem -> mapDtoToEntity(elem) }
+            when (val res = repository.getHeroesList().single()) {
+                is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
+                is ResponseWrapper.GenericError -> navController.navigate(ErrorMessage.route)
+                is ResponseWrapper.Success -> {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    res.value.forEach { elem -> list.add(mapDtoToEntity(elem)) }
+                    _state.value = HeroUiState.HeroesData(list)
                 }
-            _state.value = HeroUiState.HeroesData(res.single().toMutableStateList())
+            }
         }
     }
 

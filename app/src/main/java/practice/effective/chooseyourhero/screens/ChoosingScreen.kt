@@ -42,7 +42,7 @@ fun ChoosingScreen(
     val lazyListState = rememberLazyListState()
     val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
-    heroesViewModel.getHeroesList()
+    heroesViewModel.getHeroesList(navController)
     val state = heroesViewModel.state.collectAsState()
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
