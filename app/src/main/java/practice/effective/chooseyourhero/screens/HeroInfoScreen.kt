@@ -1,8 +1,10 @@
 package practice.effective.chooseyourhero.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
@@ -14,7 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,46 +29,92 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import practice.effective.chooseyourhero.models.Hero
+import practice.effective.chooseyourhero.rememberAppState
+import practice.effective.chooseyourhero.ui.HeroUiState
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @Composable
 internal fun HeroInfoScreen(
-    onBackClick: () -> Unit = {},
+    onBackClick: () -> Unit,
     heroId: String?,
+    heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val heroesViewModel: HeroesViewModel = viewModel()
-    val hero = remember(heroId) { heroesViewModel.getHeroesList().find { it.id == heroId } }
-    Card(modifier = modifier.fillMaxSize()) {
-        if (hero != null) {
-            val painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(
-                    LocalContext.current
-                )
-                    .data(hero.imageUrl)
-                    .size(Size.ORIGINAL).build()
-            )
+    val navController = rememberAppState().navController
+    heroesViewModel.getHero(heroId!!, navController)
+    val state = heroesViewModel.state.collectAsState()
+    HeroInfoScreen(onBackClick, state.value, modifier)
+}
 
-            when (painter.state) {
-                is AsyncImagePainter.State.Loading -> {
-                    Box {
-                        CircularProgressIndicator(
-                            modifier = modifier
-                                .size(20.dp)
-                                .align(Alignment.Center)
-                        )
-                    }
-                }
-                is AsyncImagePainter.State.Error -> {
-                    Text(text = "Oops something went wrong. Try again!")
-                }
-                else -> {
-                    AsyncImage(
-                        model = painter.request.data,
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
+@Composable
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit,
+    state: HeroUiState,
+    modifier: Modifier = Modifier
+) {
+    when (state) {
+        is HeroUiState.Loading -> {
+            Box {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+
+        is HeroUiState.Empty -> {
+            Box {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+
+        is HeroUiState.HeroesData -> {
+            HeroInfoScreen(onBackClick, state.heroesData.single())
+        }
+    }
+}
+
+
+@Composable
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit,
+    hero: Hero,
+    modifier: Modifier = Modifier
+) {
+
+    Card(modifier = modifier.fillMaxSize()) {
+        val painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(
+                LocalContext.current
+            )
+                .data(hero.imageUrl)
+                .size(Size.ORIGINAL).build()
+        )
+        when (painter.state) {
+            is AsyncImagePainter.State.Loading -> {
+                Box {
+                    CircularProgressIndicator(
+                        modifier = modifier
+                            .size(20.dp)
+                            .align(Alignment.Center)
                     )
                 }
+            }
+            is AsyncImagePainter.State.Error -> {
+                Text(text = "Oops something went wrong. Try again!")
+            }
+            else -> {
+                AsyncImage(
+                    model = painter.request.data,
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
             }
         }
 
@@ -76,15 +124,20 @@ internal fun HeroInfoScreen(
             }
             Column(
                 modifier = modifier
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .padding(15.dp)
                     .align(Alignment.BottomStart)
+                    .background(MaterialTheme.colors.primary)
             ) {
                 Text(
-                    text = hero?.name ?: "error",
+                    modifier = modifier.padding(5.dp),
+                    text = hero.name,
                     style = MaterialTheme.typography.h2,
                 )
+
                 Text(
-                    text = hero?.description ?: "error",
+                    modifier = modifier.padding(5.dp),
+                    text = hero.description,
                     style = MaterialTheme.typography.body1,
                 )
             }
