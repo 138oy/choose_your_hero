@@ -34,11 +34,17 @@ class HeroesViewModel(private val repository: HeroesRepository = HeroesRepositor
         }
     }
 
-    internal fun getHero(id: String) {
+    internal fun getHero(id: String, navController: NavController) {
         viewModelScope.launch {
-            val res = repository.getHero(id)
-                .map { elem -> mapDtoToEntity(elem) }
-            _state.value = HeroUiState.HeroesData(mutableListOf(res.single()))
+            when (val res = repository.getHero(id).single()) {
+                is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
+                is ResponseWrapper.GenericError -> navController.navigate(ErrorMessage.route)
+                is ResponseWrapper.Success -> {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    list.add(mapDtoToEntity(res.value))
+                    _state.value = HeroUiState.HeroesData(list)
+                }
+            }
         }
     }
 

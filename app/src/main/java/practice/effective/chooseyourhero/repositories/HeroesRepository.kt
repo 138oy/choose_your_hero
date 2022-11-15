@@ -18,9 +18,10 @@ class HeroesRepository(private val api: MarvelApi = MarvelApi) {
         return res
     }
 
-    internal fun getHero(id: String): Flow<HeroDto> {
-        val res: Flow<HeroDto> = flow {
-            val response = api.retrofitService.getHeroById(id).data.results.single()
+    internal fun getHero(id: String): Flow<ResponseWrapper<HeroDto>> {
+        val res: Flow<ResponseWrapper<HeroDto>> = flow {
+            val response =
+                safeApiCall(Dispatchers.IO) { api.retrofitService.getHeroById(id).data.results.single() }
             emit(response)
         }
         return res

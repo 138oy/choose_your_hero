@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import practice.effective.chooseyourhero.models.Hero
+import practice.effective.chooseyourhero.rememberAppState
 import practice.effective.chooseyourhero.ui.HeroUiState
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
@@ -40,7 +41,8 @@ internal fun HeroInfoScreen(
     heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    heroesViewModel.getHero(heroId!!)
+    val navController = rememberAppState().navController
+    heroesViewModel.getHero(heroId!!, navController)
     val state = heroesViewModel.state.collectAsState()
     HeroInfoScreen(onBackClick, state.value, modifier)
 }
