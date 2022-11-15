@@ -16,7 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,16 +29,65 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import practice.effective.chooseyourhero.models.Hero
+import practice.effective.chooseyourhero.rememberAppState
+import practice.effective.chooseyourhero.ui.HeroUiState
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @Composable
 internal fun HeroInfoScreen(
-    onBackClick: () -> Unit = {},
+    onBackClick: () -> Unit,
     heroId: String?,
     heroesViewModel: HeroesViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val hero = remember(heroId) { heroesViewModel.getHero(heroId!!) }
+    val navController = rememberAppState().navController
+    heroesViewModel.getHero(heroId!!, navController)
+    val state = heroesViewModel.state.collectAsState()
+    HeroInfoScreen(onBackClick, state.value, modifier)
+}
+
+@Composable
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit,
+    state: HeroUiState,
+    modifier: Modifier = Modifier
+) {
+    when (state) {
+        is HeroUiState.Loading -> {
+            Box {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+
+        is HeroUiState.Empty -> {
+            Box {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+
+        is HeroUiState.HeroesData -> {
+            HeroInfoScreen(onBackClick, state.heroesData.single())
+        }
+    }
+}
+
+
+@Composable
+internal fun HeroInfoScreen(
+    onBackClick: () -> Unit,
+    hero: Hero,
+    modifier: Modifier = Modifier
+) {
+
     Card(modifier = modifier.fillMaxSize()) {
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(
@@ -47,7 +96,6 @@ internal fun HeroInfoScreen(
                 .data(hero.imageUrl)
                 .size(Size.ORIGINAL).build()
         )
-
         when (painter.state) {
             is AsyncImagePainter.State.Loading -> {
                 Box {
