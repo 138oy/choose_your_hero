@@ -26,10 +26,18 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
         viewModelScope.launch {
             when (val res = repository.getHeroesList().single()) {
                 is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
-                is ResponseWrapper.GenericError -> navController.navigate(ErrorMessage.route)
+                is ResponseWrapper.GenericError -> try{
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroesListCached()
+                    dbRes.single().forEach { elem -> list.add(elem)}
+                    _state.value = HeroUiState.HeroesData(list)
+                }catch (e: Throwable) {
+                    navController.navigate(ErrorMessage.route)
+                }
                 is ResponseWrapper.Success -> {
                     val list: MutableList<Hero> = mutableStateListOf()
                     res.value.forEach { elem -> list.add(mapDtoToEntity(elem)) }
+                    repository.insertHeroesList(list)
                     _state.value = HeroUiState.HeroesData(list)
                 }
             }

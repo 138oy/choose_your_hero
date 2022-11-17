@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import practice.effective.chooseyourhero.database.dao.HeroDao
+import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.network.MarvelApiService
 import practice.effective.chooseyourhero.network.ResponseWrapper
 import practice.effective.chooseyourhero.network.dtos.HeroDto
@@ -27,6 +28,18 @@ class HeroesRepository @Inject constructor(
         val res: Flow<ResponseWrapper<HeroDto>> = flow {
             val response =
                 safeApiCall(Dispatchers.IO) { api.getHeroById(id).data.results.single() }
+            emit(response)
+        }
+        return res
+    }
+
+    internal suspend fun insertHeroesList(heroesList: List<Hero>) {
+        dao.insertAll(heroesList)
+    }
+
+    internal fun getHeroesListCached(): Flow<List<Hero>> {
+        val res: Flow<List<Hero>> = flow {
+            val response = dao.getHeroesList()
             emit(response)
         }
         return res
