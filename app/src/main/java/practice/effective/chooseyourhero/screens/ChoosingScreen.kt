@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
@@ -36,7 +36,7 @@ import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 @Composable
 fun ChoosingScreen(
     navController: NavHostController,
-    heroesViewModel: HeroesViewModel = viewModel(),
+    heroesViewModel: HeroesViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()

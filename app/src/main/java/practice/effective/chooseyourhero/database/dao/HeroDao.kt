@@ -12,7 +12,7 @@ interface HeroDao {
     @Query("SELECT * FROM heroes")
     fun getHeroesList(): List<Hero>
 
-    @Query("SELECT * FROM heroes WHERE id == :id")
+    @Query("SELECT * FROM heroes WHERE id LIKE :id")
     fun getHeroById(id: String): Hero
 
     @Insert

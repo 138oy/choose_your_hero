@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -38,7 +38,7 @@ import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 internal fun HeroInfoScreen(
     onBackClick: () -> Unit,
     heroId: String?,
-    heroesViewModel: HeroesViewModel = viewModel(),
+    heroesViewModel: HeroesViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     val navController = rememberAppState().navController
