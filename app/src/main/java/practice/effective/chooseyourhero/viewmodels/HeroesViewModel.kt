@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
@@ -16,7 +18,8 @@ import practice.effective.chooseyourhero.network.dtos.HeroDto
 import practice.effective.chooseyourhero.repositories.HeroesRepository
 import practice.effective.chooseyourhero.ui.HeroUiState
 
-class HeroesViewModel(private val repository: HeroesRepository = HeroesRepository()) : ViewModel() {
+@HiltViewModel
+class HeroesViewModel @Inject constructor(private val repository: HeroesRepository) : ViewModel() {
     private val _state = MutableStateFlow<HeroUiState>(HeroUiState.Empty)
     val state = _state.asStateFlow()
 
