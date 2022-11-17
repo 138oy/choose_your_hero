@@ -4,7 +4,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 import practice.effective.chooseyourhero.database.dao.HeroDao
 import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.network.MarvelApiService
@@ -28,10 +27,10 @@ class HeroesRepository @Inject constructor(
     internal fun getHero(id: String): Flow<ResponseWrapper<HeroDto>> {
         val res: Flow<ResponseWrapper<HeroDto>> =
             flow {
-            val response =
-                safeApiCall(Dispatchers.IO) { api.getHeroById(id).data.results.single() }
-            emit(response)
-        }
+                val response =
+                    safeApiCall(Dispatchers.IO) { api.getHeroById(id).data.results.single() }
+                emit(response)
+            }
         return res
     }
 
