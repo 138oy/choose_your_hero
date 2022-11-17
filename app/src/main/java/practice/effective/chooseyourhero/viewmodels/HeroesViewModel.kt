@@ -1,5 +1,6 @@
 package practice.effective.chooseyourhero.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,15 +26,28 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
     internal fun getHeroesList(navController: NavController) {
         viewModelScope.launch {
             when (val res = repository.getHeroesList().single()) {
-                is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
-                is ResponseWrapper.GenericError -> try{
+
+                is ResponseWrapper.NetworkError -> try {
                     val list: MutableList<Hero> = mutableStateListOf()
                     val dbRes = repository.getHeroesListCached()
-                    dbRes.single().forEach { elem -> list.add(elem)}
+                    dbRes.single().forEach { elem -> list.add(elem) }
                     _state.value = HeroUiState.HeroesData(list)
-                }catch (e: Throwable) {
+                    Log.d("heroes", "$list")
+                } catch (e: Throwable) {
+                    Log.d("network error!", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
+
+                is ResponseWrapper.GenericError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroesListCached()
+                    dbRes.single().forEach { elem -> list.add(elem) }
+                    _state.value = HeroUiState.HeroesData(list)
+                } catch (e: Throwable) {
+                    Log.d("generic error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
                 is ResponseWrapper.Success -> {
                     val list: MutableList<Hero> = mutableStateListOf()
                     res.value.forEach { elem -> list.add(mapDtoToEntity(elem)) }
@@ -47,8 +61,29 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
     internal fun getHero(id: String, navController: NavController) {
         viewModelScope.launch {
             when (val res = repository.getHero(id).single()) {
-                is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
-                is ResponseWrapper.GenericError -> navController.navigate(ErrorMessage.route)
+
+                is ResponseWrapper.NetworkError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroCached(id)
+                    list.add(dbRes.single())
+                    _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
+                } catch (e: Throwable) {
+                    Log.d("network error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
+                is ResponseWrapper.GenericError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroCached(id)
+                    list.add(dbRes.single())
+                    _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
+                } catch (e: Throwable) {
+                    Log.d("generic error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
                 is ResponseWrapper.Success -> {
                     val list: MutableList<Hero> = mutableStateListOf()
                     list.add(mapDtoToEntity(res.value))

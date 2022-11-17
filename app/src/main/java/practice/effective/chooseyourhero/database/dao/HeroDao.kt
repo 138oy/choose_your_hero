@@ -6,15 +6,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import practice.effective.chooseyourhero.models.Hero
 
 @Dao
 interface HeroDao {
     @Query("SELECT * FROM heroes")
-    fun getHeroesList(): List<Hero>
+    suspend fun getHeroesList(): List<Hero>
 
     @Query("SELECT * FROM heroes WHERE id LIKE :id")
-    fun getHeroById(id: String): Hero
+    suspend fun getHero(id: String): Hero
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOne(hero: Hero)

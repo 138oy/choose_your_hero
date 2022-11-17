@@ -4,6 +4,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.single
 import practice.effective.chooseyourhero.database.dao.HeroDao
 import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.network.MarvelApiService
@@ -25,7 +26,8 @@ class HeroesRepository @Inject constructor(
     }
 
     internal fun getHero(id: String): Flow<ResponseWrapper<HeroDto>> {
-        val res: Flow<ResponseWrapper<HeroDto>> = flow {
+        val res: Flow<ResponseWrapper<HeroDto>> =
+            flow {
             val response =
                 safeApiCall(Dispatchers.IO) { api.getHeroById(id).data.results.single() }
             emit(response)
@@ -37,9 +39,17 @@ class HeroesRepository @Inject constructor(
         dao.insertAll(heroesList)
     }
 
-    internal fun getHeroesListCached(): Flow<List<Hero>> {
+    internal suspend fun getHeroesListCached(): Flow<List<Hero>> {
         val res: Flow<List<Hero>> = flow {
             val response = dao.getHeroesList()
+            emit(response)
+        }
+        return res
+    }
+
+    internal suspend fun getHeroCached(id: String): Flow<Hero> {
+        val res: Flow<Hero> = flow {
+            val response = dao.getHero(id)
             emit(response)
         }
         return res
