@@ -17,6 +17,7 @@ android {
         buildConfigField("String", "PUBLIC_KEY", apikeyProperties['publicKey'])
         buildConfigField("String", "PRIVATE_KEY", apikeyProperties['privateKey'])
         buildConfigField("String", "HASH", apikeyProperties['hash'])
+        buildConfigField("String", "BASE_URL", "\"https://gateway.marvel.com\"")
         applicationId "practice.effective.chooseyourhero"
         minSdk 21
         targetSdk 33

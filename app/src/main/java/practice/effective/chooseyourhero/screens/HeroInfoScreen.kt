@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -20,18 +18,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
-import coil.size.Size
 import practice.effective.chooseyourhero.models.Hero
 import practice.effective.chooseyourhero.rememberAppState
 import practice.effective.chooseyourhero.ui.HeroUiState
+import practice.effective.chooseyourhero.ui.components.HeroDescription
+import practice.effective.chooseyourhero.ui.components.HeroImage
+import practice.effective.chooseyourhero.ui.components.ProgressCircle
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @Composable
@@ -55,23 +49,11 @@ internal fun HeroInfoScreen(
 ) {
     when (state) {
         is HeroUiState.Loading -> {
-            Box {
-                CircularProgressIndicator(
-                    modifier = modifier
-                        .size(20.dp)
-                        .align(Alignment.Center)
-                )
-            }
+            ProgressCircle(modifier.size(40.dp))
         }
 
         is HeroUiState.Empty -> {
-            Box {
-                CircularProgressIndicator(
-                    modifier = modifier
-                        .size(20.dp)
-                        .align(Alignment.Center)
-                )
-            }
+            ProgressCircle(modifier.size(40.dp))
         }
 
         is HeroUiState.HeroesData -> {
@@ -87,41 +69,13 @@ internal fun HeroInfoScreen(
     hero: Hero,
     modifier: Modifier = Modifier
 ) {
-
     Card(modifier = modifier.fillMaxSize()) {
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(
-                LocalContext.current
-            )
-                .data(hero.imageUrl)
-                .size(Size.ORIGINAL).build()
-        )
-        when (painter.state) {
-            is AsyncImagePainter.State.Loading -> {
-                Box {
-                    CircularProgressIndicator(
-                        modifier = modifier
-                            .size(20.dp)
-                            .align(Alignment.Center)
-                    )
-                }
-            }
-            is AsyncImagePainter.State.Error -> {
-                Text(text = "Oops something went wrong. Try again!")
-            }
-            else -> {
-                AsyncImage(
-                    model = painter.request.data,
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop
-                )
-            }
-        }
-
+        HeroImage(hero)
         Box {
             IconButton(onClick = onBackClick) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
             }
+
             Column(
                 modifier = modifier
                     .fillMaxWidth()
@@ -129,17 +83,7 @@ internal fun HeroInfoScreen(
                     .align(Alignment.BottomStart)
                     .background(MaterialTheme.colors.primary)
             ) {
-                Text(
-                    modifier = modifier.padding(5.dp),
-                    text = hero.name,
-                    style = MaterialTheme.typography.h2,
-                )
-
-                Text(
-                    modifier = modifier.padding(5.dp),
-                    text = hero.description,
-                    style = MaterialTheme.typography.body1,
-                )
+                HeroDescription(hero.name, hero.description, modifier.padding(5.dp))
             }
         }
     }
