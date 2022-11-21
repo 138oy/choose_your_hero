@@ -1,12 +1,14 @@
 package practice.effective.chooseyourhero.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import practice.effective.chooseyourhero.models.Hero
@@ -16,18 +18,40 @@ import practice.effective.chooseyourhero.network.dtos.HeroDto
 import practice.effective.chooseyourhero.repositories.HeroesRepository
 import practice.effective.chooseyourhero.ui.HeroUiState
 
-class HeroesViewModel(private val repository: HeroesRepository = HeroesRepository()) : ViewModel() {
+@HiltViewModel
+class HeroesViewModel @Inject constructor(private val repository: HeroesRepository) : ViewModel() {
     private val _state = MutableStateFlow<HeroUiState>(HeroUiState.Empty)
     val state = _state.asStateFlow()
 
     internal fun getHeroesList(navController: NavController) {
         viewModelScope.launch {
             when (val res = repository.getHeroesList().single()) {
-                is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
-                is ResponseWrapper.GenericError -> navController.navigate(ErrorMessage.route)
+
+                is ResponseWrapper.NetworkError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroesListCached()
+                    dbRes.single().forEach { elem -> list.add(elem) }
+                    _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
+                } catch (e: Throwable) {
+                    Log.d("network error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
+                is ResponseWrapper.GenericError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroesListCached()
+                    dbRes.single().forEach { elem -> list.add(elem) }
+                    _state.value = HeroUiState.HeroesData(list)
+                } catch (e: Throwable) {
+                    Log.d("generic error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
                 is ResponseWrapper.Success -> {
                     val list: MutableList<Hero> = mutableStateListOf()
                     res.value.forEach { elem -> list.add(mapDtoToEntity(elem)) }
+                    repository.insertHeroesList(list)
                     _state.value = HeroUiState.HeroesData(list)
                 }
             }
@@ -37,8 +61,29 @@ class HeroesViewModel(private val repository: HeroesRepository = HeroesRepositor
     internal fun getHero(id: String, navController: NavController) {
         viewModelScope.launch {
             when (val res = repository.getHero(id).single()) {
-                is ResponseWrapper.NetworkError -> navController.navigate(ErrorMessage.route)
-                is ResponseWrapper.GenericError -> navController.navigate(ErrorMessage.route)
+
+                is ResponseWrapper.NetworkError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroCached(id)
+                    list.add(dbRes.single())
+                    _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
+                } catch (e: Throwable) {
+                    Log.d("network error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
+                is ResponseWrapper.GenericError -> try {
+                    val list: MutableList<Hero> = mutableStateListOf()
+                    val dbRes = repository.getHeroCached(id)
+                    list.add(dbRes.single())
+                    _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
+                } catch (e: Throwable) {
+                    Log.d("generic error!", "${e.message}")
+                    navController.navigate(ErrorMessage.route)
+                }
+
                 is ResponseWrapper.Success -> {
                     val list: MutableList<Hero> = mutableStateListOf()
                     list.add(mapDtoToEntity(res.value))
