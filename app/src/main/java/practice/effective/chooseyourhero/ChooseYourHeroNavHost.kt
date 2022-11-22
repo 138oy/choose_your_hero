@@ -29,7 +29,7 @@ fun ChooseYourHeroNavHost(
             arguments = HeroInfo.arguments,
         ) { navBackStackEntry ->
             val heroId = navBackStackEntry.arguments?.getString(HeroInfo.heroIdArg)
-            HeroInfoScreen(onBackClick = { appState.onGoBack() }, heroId)
+            HeroInfoScreen(navController, onBackClick = { appState.onGoBack() }, heroId)
         }
         composable(route = ErrorMessage.route) {
             ErrorScreen()

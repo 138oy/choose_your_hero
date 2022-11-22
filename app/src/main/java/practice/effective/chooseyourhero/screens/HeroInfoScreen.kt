@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import practice.effective.chooseyourhero.models.Hero
-import practice.effective.chooseyourhero.rememberAppState
 import practice.effective.chooseyourhero.ui.HeroUiState
 import practice.effective.chooseyourhero.ui.components.HeroDescription
 import practice.effective.chooseyourhero.ui.components.HeroImage
@@ -30,12 +30,12 @@ import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @Composable
 internal fun HeroInfoScreen(
+    navController: NavController,
     onBackClick: () -> Unit,
     heroId: String?,
     heroesViewModel: HeroesViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val navController = rememberAppState().navController
     heroesViewModel.getHero(heroId!!, navController)
     val state = heroesViewModel.state.collectAsState()
     HeroInfoScreen(onBackClick, state.value, modifier)

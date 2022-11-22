@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
@@ -18,7 +18,7 @@ import practice.effective.chooseyourhero.ui.HeroUiState
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun HeroesLazyList(
-    navController: NavHostController,
+    navController: NavController,
     lazyListState: LazyListState,
     layoutInfo: LazyListSnapperLayoutInfo,
     state: HeroUiState,
