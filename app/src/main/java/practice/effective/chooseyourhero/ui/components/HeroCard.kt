@@ -30,7 +30,7 @@ internal fun HeroCard(
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
-    BoxWithConstraints() {
+    BoxWithConstraints {
         val currHeight = (maxHeight / 12) * 10
         val currWidth = (currHeight / 3) * 2
         val otherHeight = (maxHeight / 12) * 9

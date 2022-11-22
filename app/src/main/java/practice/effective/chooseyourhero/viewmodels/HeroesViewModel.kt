@@ -32,9 +32,7 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
                     val dbRes = repository.getHeroesListCached()
                     dbRes.single().forEach { elem -> list.add(elem) }
                     _state.value = HeroUiState.HeroesData(list)
-                    Log.d("heroes", "$list")
                 } catch (e: Throwable) {
-                    Log.d("network error!", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
 
@@ -44,7 +42,6 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
                     dbRes.single().forEach { elem -> list.add(elem) }
                     _state.value = HeroUiState.HeroesData(list)
                 } catch (e: Throwable) {
-                    Log.d("generic error!", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
 
