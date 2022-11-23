@@ -56,7 +56,7 @@ internal fun HeroCard(
                     }
                 })
         ) {
-            HeroImage(hero)
+            HeroImage(hero.imageUrl)
             Box(contentAlignment = Alignment.BottomStart) {
                 Surface(
                     modifier = modifier

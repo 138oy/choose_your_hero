@@ -1,10 +1,10 @@
 package practice.effective.chooseyourhero.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
@@ -14,10 +14,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -36,13 +43,22 @@ internal fun HeroInfoScreen(
     heroesViewModel: HeroesViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
+    var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
+    val configuration = LocalConfiguration.current
+
+    LaunchedEffect(configuration) {
+        snapshotFlow { configuration.orientation }
+            .collect { orientation = it }
+    }
+
     heroesViewModel.getHero(heroId!!, navController)
     val state = heroesViewModel.state.collectAsState()
-    HeroInfoScreen(onBackClick, state.value, modifier)
+    HeroInfoScreen(orientation, onBackClick, state.value, modifier)
 }
 
 @Composable
 internal fun HeroInfoScreen(
+    orientation: Int,
     onBackClick: () -> Unit,
     state: HeroUiState,
     modifier: Modifier = Modifier
@@ -57,34 +73,64 @@ internal fun HeroInfoScreen(
         }
 
         is HeroUiState.HeroesData -> {
-            HeroInfoScreen(onBackClick, state.heroesData.single())
+            when (orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    HeroInfoScreenLandscape(onBackClick, state.heroesData.single())
+                }
+                else -> {
+                    HeroInfoScreenPortrait(onBackClick, state.heroesData.single())
+                }
+            }
         }
     }
 }
 
 
 @Composable
-internal fun HeroInfoScreen(
+internal fun HeroInfoScreenPortrait(
     onBackClick: () -> Unit,
     hero: Hero,
     modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier.fillMaxSize()) {
-        HeroImage(hero)
+        HeroImage(hero.imageUrl)
         Box {
             IconButton(onClick = onBackClick) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
             }
 
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .align(Alignment.BottomStart)
-                    .background(MaterialTheme.colors.primary)
-            ) {
+            Box(modifier = modifier.align(Alignment.BottomStart)) {
                 HeroDescription(hero.name, hero.description, modifier.padding(5.dp))
             }
+        }
+    }
+}
+
+@Composable
+internal fun HeroInfoScreenLandscape(
+    onBackClick: () -> Unit,
+    hero: Hero,
+    modifier: Modifier = Modifier
+) {
+    Row {
+        Box(
+            modifier = modifier.weight(2f)
+        ) {
+            Card(modifier = modifier.fillMaxSize()) {
+                HeroImage(hero.imageUrl)
+                Box {
+                    IconButton(onClick = onBackClick) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
+                    }
+                }
+            }
+        }
+        Box(
+            modifier = modifier
+                .weight(3f)
+                .background(MaterialTheme.colors.primary)
+        ) {
+            HeroDescription(hero.name, hero.description, modifier.padding(5.dp))
         }
     }
 }

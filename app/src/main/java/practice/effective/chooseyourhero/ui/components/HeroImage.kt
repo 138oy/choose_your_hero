@@ -12,18 +12,17 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import practice.effective.chooseyourhero.models.Hero
 
 @Composable
 fun HeroImage(
-    hero: Hero,
+    url: String,
     modifier: Modifier = Modifier
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(
             LocalContext.current
         )
-            .data(hero.imageUrl)
+            .data(url)
             .size(Size.ORIGINAL).build()
     )
 
