@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import practice.effective.chooseyourhero.navigation.ChoosingAHero
 import practice.effective.chooseyourhero.ui.theme.ChooseYourHeroTheme
@@ -14,6 +15,7 @@ import practice.effective.chooseyourhero.ui.theme.ChooseYourHeroTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ChooseYourHeroTheme {
                 val appState = rememberAppState()

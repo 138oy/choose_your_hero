@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
@@ -95,11 +96,20 @@ internal fun HeroInfoScreenPortrait(
     Card(modifier = modifier.fillMaxSize()) {
         HeroImage(hero.imageUrl)
         Box {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = modifier.padding(vertical = 15.dp)
+            ) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
             }
 
-            Box(modifier = modifier.align(Alignment.BottomStart)) {
+            Box(
+                modifier = modifier
+                    .align(Alignment.BottomStart)
+                    .padding(15.dp)
+                    .background(MaterialTheme.colors.primary)
+                    .fillMaxWidth()
+            ) {
                 HeroDescription(hero.name, hero.description, modifier.padding(5.dp))
             }
         }
@@ -119,7 +129,10 @@ internal fun HeroInfoScreenLandscape(
             Card(modifier = modifier.fillMaxSize()) {
                 HeroImage(hero.imageUrl)
                 Box {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = modifier.padding(vertical = 15.dp)
+                    ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
                     }
                 }
@@ -128,7 +141,7 @@ internal fun HeroInfoScreenLandscape(
         Box(
             modifier = modifier
                 .weight(3f)
-                .background(MaterialTheme.colors.primary)
+                .padding(15.dp)
         ) {
             HeroDescription(hero.name, hero.description, modifier.padding(5.dp))
         }
