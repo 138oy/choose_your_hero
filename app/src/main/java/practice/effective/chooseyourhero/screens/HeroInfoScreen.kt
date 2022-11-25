@@ -15,17 +15,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -34,6 +27,7 @@ import practice.effective.chooseyourhero.ui.HeroUiState
 import practice.effective.chooseyourhero.ui.components.HeroDescription
 import practice.effective.chooseyourhero.ui.components.HeroImage
 import practice.effective.chooseyourhero.ui.components.ProgressCircle
+import practice.effective.chooseyourhero.ui.getOrientationState
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @Composable
@@ -44,13 +38,7 @@ internal fun HeroInfoScreen(
     heroesViewModel: HeroesViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
-    val configuration = LocalConfiguration.current
-
-    LaunchedEffect(configuration) {
-        snapshotFlow { configuration.orientation }
-            .collect { orientation = it }
-    }
+    val orientation = getOrientationState()
 
     heroesViewModel.getHero(heroId!!, navController)
     val state = heroesViewModel.state.collectAsState()

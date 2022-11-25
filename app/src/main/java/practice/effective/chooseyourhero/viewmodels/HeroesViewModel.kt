@@ -1,7 +1,6 @@
 package practice.effective.chooseyourhero.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -28,28 +27,33 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
             when (val res = repository.getHeroesList().single()) {
 
                 is ResponseWrapper.NetworkError -> try {
-                    val list: MutableList<Hero> = mutableStateListOf()
+                    val list: MutableList<Hero> = mutableListOf()
                     val dbRes = repository.getHeroesListCached()
                     dbRes.single().forEach { elem -> list.add(elem) }
                     _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
                 } catch (e: Throwable) {
+                    Log.d("network error!10", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
 
                 is ResponseWrapper.GenericError -> try {
-                    val list: MutableList<Hero> = mutableStateListOf()
+                    val list: MutableList<Hero> = mutableListOf()
                     val dbRes = repository.getHeroesListCached()
                     dbRes.single().forEach { elem -> list.add(elem) }
                     _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
                 } catch (e: Throwable) {
+                    Log.d("generic error!1", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
 
                 is ResponseWrapper.Success -> {
-                    val list: MutableList<Hero> = mutableStateListOf()
+                    val list: MutableList<Hero> = mutableListOf()
                     res.value.forEach { elem -> list.add(mapDtoToEntity(elem)) }
                     repository.insertHeroesList(list)
                     _state.value = HeroUiState.HeroesData(list)
+                    Log.d("heroes", "$list")
                 }
             }
         }
@@ -60,31 +64,32 @@ class HeroesViewModel @Inject constructor(private val repository: HeroesReposito
             when (val res = repository.getHero(id).single()) {
 
                 is ResponseWrapper.NetworkError -> try {
-                    val list: MutableList<Hero> = mutableStateListOf()
+                    val list: MutableList<Hero> = mutableListOf()
                     val dbRes = repository.getHeroCached(id)
                     list.add(dbRes.single())
                     _state.value = HeroUiState.HeroesData(list)
-                    Log.d("heroes", "$list")
+                    Log.d("hero", "$list")
                 } catch (e: Throwable) {
-                    Log.d("network error!", "${e.message}")
+                    Log.d("network error!1", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
 
                 is ResponseWrapper.GenericError -> try {
-                    val list: MutableList<Hero> = mutableStateListOf()
+                    val list: MutableList<Hero> = mutableListOf()
                     val dbRes = repository.getHeroCached(id)
                     list.add(dbRes.single())
                     _state.value = HeroUiState.HeroesData(list)
-                    Log.d("heroes", "$list")
+                    Log.d("hero", "$list")
                 } catch (e: Throwable) {
-                    Log.d("generic error!", "${e.message}")
+                    Log.d("generic error!1", "${e.message}")
                     navController.navigate(ErrorMessage.route)
                 }
 
                 is ResponseWrapper.Success -> {
-                    val list: MutableList<Hero> = mutableStateListOf()
+                    val list: MutableList<Hero> = mutableListOf()
                     list.add(mapDtoToEntity(res.value))
                     _state.value = HeroUiState.HeroesData(list)
+                    Log.d("hero", "$list")
                 }
             }
         }
