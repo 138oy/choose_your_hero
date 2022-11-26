@@ -3,10 +3,10 @@ package practice.effective.chooseyourhero
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import practice.effective.chooseyourhero.navigation.ChoosingAHero
 
 @Composable
 fun rememberAppState(navController: NavHostController = rememberNavController()):
@@ -20,6 +20,8 @@ class AppState(val navController: NavHostController) {
             .currentBackStackEntryAsState().value?.destination
 
     fun onGoBack() {
-        navController.popBackStack()
+        if (navController.currentDestination != navController.graph.findNode(ChoosingAHero.route)) {
+            navController.popBackStack()
+        }
     }
 }

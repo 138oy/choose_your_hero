@@ -1,35 +1,30 @@
 package practice.effective.chooseyourhero.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
-import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-import practice.effective.chooseyourhero.R
 import practice.effective.chooseyourhero.ui.HeroUiState
-import practice.effective.chooseyourhero.ui.components.HeroCard
+import practice.effective.chooseyourhero.ui.components.HeroesLazyList
+import practice.effective.chooseyourhero.ui.components.LogoWithSlogan
+import practice.effective.chooseyourhero.ui.getOrientationState
 import practice.effective.chooseyourhero.viewmodels.HeroesViewModel
 
 @OptIn(ExperimentalSnapperApi::class)
@@ -39,72 +34,76 @@ fun ChoosingScreen(
     heroesViewModel: HeroesViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    val lazyListState = rememberLazyListState()
-    val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
+    val orientation = getOrientationState()
 
     heroesViewModel.getHeroesList(navController)
     val state = heroesViewModel.state.collectAsState()
+    val lazyListState = rememberLazyListState()
+    val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(R.drawable.marvel),
-            contentDescription = "",
-            modifier = modifier
-                .padding(vertical = 5.dp)
-                .size(150.dp),
-        )
-        Text(
-            text = stringResource(id = R.string.choose_your_hero),
-            style = MaterialTheme.typography.h1,
-        )
-        HeroesLazyList(navController, lazyListState, layoutInfo, state.value)
+    when (orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            ChoosingScreenLandscape(navController, lazyListState, layoutInfo, state)
+        }
+        else -> {
+            ChoosingScreenPortrait(navController, lazyListState, layoutInfo, state)
+        }
     }
 }
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
-fun HeroesLazyList(
-    navController: NavHostController,
+fun ChoosingScreenPortrait(
+    navController: NavController,
     lazyListState: LazyListState,
     layoutInfo: LazyListSnapperLayoutInfo,
-    state: HeroUiState,
+    state: State<HeroUiState>,
     modifier: Modifier = Modifier,
 ) {
-    when (state) {
-        is HeroUiState.Loading -> {
-            Box {
-                CircularProgressIndicator(
-                    modifier = modifier
-                        .size(20.dp)
-                        .align(Alignment.Center)
-                )
-            }
-        }
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        LogoWithSlogan(
+            modifier
+                .padding(vertical = 5.dp)
+                .size(150.dp)
+        )
+        HeroesLazyList(
+            navController,
+            lazyListState,
+            layoutInfo,
+            state.value,
+            modifier.fillMaxSize()
+        )
+    }
+}
 
-        is HeroUiState.Empty -> {
-            Box {
-                CircularProgressIndicator(
-                    modifier = modifier
-                        .size(20.dp)
-                        .align(Alignment.Center)
-                )
-            }
+@OptIn(ExperimentalSnapperApi::class)
+@Composable
+fun ChoosingScreenLandscape(
+    navController: NavController,
+    lazyListState: LazyListState,
+    layoutInfo: LazyListSnapperLayoutInfo,
+    state: State<HeroUiState>,
+    modifier: Modifier = Modifier,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier.weight(2f)
+        ) {
+            LogoWithSlogan(
+                modifier
+                    .padding(horizontal = 5.dp)
+                    .size(150.dp)
+            )
         }
-
-        is HeroUiState.HeroesData -> {
-            val items = state.heroesData
-            LazyRow(
-                modifier = modifier
-                    .fillMaxSize(),
-                state = lazyListState,
-                flingBehavior = rememberSnapperFlingBehavior(lazyListState),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(15.dp),
-            ) {
-                items(items) { item ->
-                    HeroCard(item, items.indexOf(item), layoutInfo, navController)
-                }
-            }
+        Box(modifier = modifier.weight(3f)) {
+            HeroesLazyList(
+                navController,
+                lazyListState,
+                layoutInfo,
+                state.value,
+                modifier.fillMaxSize()
+            )
         }
     }
 }

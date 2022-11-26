@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import practice.effective.chooseyourhero.BuildConfig
 import practice.effective.chooseyourhero.database.ChooseYourHeroAppDatabase
 import practice.effective.chooseyourhero.database.dao.HeroDao
 import practice.effective.chooseyourhero.network.MarvelApiService
@@ -56,7 +57,7 @@ class AppModule {
     fun provideRetrofit(moshi: Moshi): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("https://gateway.marvel.com")
+            .baseUrl(BuildConfig.BASE_URL)
             .build()
     }
 
