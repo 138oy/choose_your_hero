@@ -2,6 +2,7 @@ package practice.effective.chooseyourhero.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 
 interface AppDestination {
     val route: String
@@ -18,6 +19,7 @@ object HeroInfo : AppDestination {
     val arguments = listOf(
         navArgument(heroIdArg) { type = NavType.StringType }
     )
+    val deepLinks = listOf(navDeepLink { uriPattern = "https://app.com/{hero_id}" })
 }
 
 object ErrorMessage : AppDestination {
