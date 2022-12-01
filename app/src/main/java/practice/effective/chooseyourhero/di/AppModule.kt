@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import practice.effective.chooseyourhero.BuildConfig
+import practice.effective.chooseyourhero.PushNotificationInteractor
 import practice.effective.chooseyourhero.database.ChooseYourHeroAppDatabase
 import practice.effective.chooseyourhero.database.dao.HeroDao
 import practice.effective.chooseyourhero.network.MarvelApiService
@@ -21,6 +22,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+    @Provides
+    @Singleton
+    fun providePushNotificationProvider(dao: HeroDao) = PushNotificationInteractor(dao)
+
     @Provides
     @Singleton
     fun provideDatabase(

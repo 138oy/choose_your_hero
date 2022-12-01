@@ -6,16 +6,23 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class PushNotificationService : FirebaseMessagingService() {
+    @Inject
+    lateinit var interactor: PushNotificationInteractor
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d("to", "$remoteMessage.to")
         if (remoteMessage.data.isNotEmpty()) {
             sendNotification()
         }
@@ -28,9 +35,11 @@ class PushNotificationService : FirebaseMessagingService() {
 
         createChannel(channelId, notificationManager)
 
+        val heroId = interactor.getRandomId()
+
         val deepLinkIntent = Intent(
             Intent.ACTION_VIEW,
-            "https://app.com/1011334".toUri(),
+            "https://app.com/$heroId".toUri(),
         )
 
         val deepLinkPendingIntent: PendingIntent? =
