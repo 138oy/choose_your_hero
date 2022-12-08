@@ -24,17 +24,18 @@ class PushNotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d("to", "$remoteMessage.to")
         if (remoteMessage.data.isNotEmpty()) {
-            sendNotification()
+            sendNotification(remoteMessage)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun sendNotification() {
+    fun sendNotification(rm: RemoteMessage) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "NOTIFICATIONS_CHANNEL"
 
         createChannel(channelId, notificationManager)
 
+//      val heroId = rm.data.get("id")
         val heroId = interactor.getRandomId()
 
         val deepLinkIntent = Intent(
