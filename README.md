@@ -9,7 +9,7 @@ It's also been a great and easy project to try some of the essential Android dev
 
 The app shows a list of Marvel heroes. The data is received from Marvel API.
 
-The main screen has a Marvel logo, a slogan and a carousel of the heroes. You can tap on the card to open the screen containing the information card (now you can also read some tea about the hero you tapped on yay).
+The main screen has a Marvel logo, a slogan and a carousel of the heroes. You can tap on the card to open the screen containing the information card (so that you can also read some tea about the hero you tapped on yay).
 
 The app supports caching, light/dark theme, device orientation change, edge-to-edge screen, right-to-left writing and english and russian locales.
 
