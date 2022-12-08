@@ -3,5 +3,5 @@
     <string name="app_name">ChooseYourHero</string>
     <string name="choose_your_hero">Выбери своего героя!</string>
     <string name="notification_title">Взгляни-ка на этого героя!</string>
-    <string name="notification_body">Есть вероятность, это твой новый любимчик...</string>
+    <string name="notification_body">Есть вероятность того, что это твой новый любимчик...</string>
 </resources>

@@ -31,9 +31,9 @@ internal fun HeroCard(
     modifier: Modifier = Modifier,
 ) {
     BoxWithConstraints {
-        val currHeight = (maxHeight / 12) * 10
+        val currHeight = (maxHeight / 12) * 9
         val currWidth = (currHeight / 3) * 2
-        val otherHeight = (maxHeight / 12) * 9
+        val otherHeight = (maxHeight / 12) * 8
         val otherWidth = (otherHeight / 3) * 2
 
         val cardModifier = if (itemIndex == layoutInfo.currentItem?.index) modifier.size(

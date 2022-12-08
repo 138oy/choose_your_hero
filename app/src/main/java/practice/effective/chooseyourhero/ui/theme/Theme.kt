@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-//to do: change architecture
 private val DarkColorPalette = darkColors(
     primary = primary,
     primaryVariant = primaryDark,
