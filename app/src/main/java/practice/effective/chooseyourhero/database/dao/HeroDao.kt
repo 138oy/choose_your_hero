@@ -16,6 +16,9 @@ interface HeroDao {
     @Query("SELECT * FROM heroes WHERE id LIKE :id")
     suspend fun getHero(id: String): Hero
 
+    @Query("SELECT id FROM heroes ORDER BY RANDOM() LIMIT 1")
+    fun getRandomId(): String
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOne(hero: Hero)
 

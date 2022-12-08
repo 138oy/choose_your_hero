@@ -27,6 +27,7 @@ fun ChooseYourHeroNavHost(
         composable(
             route = "${HeroInfo.route}/{${HeroInfo.heroIdArg}}",
             arguments = HeroInfo.arguments,
+            deepLinks = HeroInfo.deepLinks,
         ) { navBackStackEntry ->
             val heroId = navBackStackEntry.arguments?.getString(HeroInfo.heroIdArg)
             HeroInfoScreen(navController, onBackClick = { appState.onGoBack() }, heroId)
