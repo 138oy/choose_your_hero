@@ -17,10 +17,10 @@ The app supports caching, light/dark theme, device orientation change, edge-to-e
 
 The layout of the screens in both portrait and landscape orientations:
 
-|             | Portrait                                                              | Landscape                                                        |
-|-------------|-----------------------------------------------------------------------|------------------------------------------------------------------|
-| main screen | <img src="assets/layout/PORTRAIT/choosing_screen.png" height="400">   | <assets/layout/LANDSCAPE/choosing_screen.png" height="400">      |
-| info screen | <img src="assets/layout/PORTRAIT/hero_ info_screen.png" height="400"> | <assets/layout/LANDSCAPE/hero_info_screen.png.png" height="400"> |                                                                       |
+|             | Portrait                                                              | Landscape                                                                 |
+|-------------|-----------------------------------------------------------------------|---------------------------------------------------------------------------|
+| main screen | <img src="assets/layout/PORTRAIT/choosing_screen.png" height="400">   | <img src="assets/layout/LANDSCAPE/choosing_screen.png" height="400">      |
+| info screen | <img src="assets/layout/PORTRAIT/hero_ info_screen.png" height="400"> | <img src="assets/layout/LANDSCAPE/hero_info_screen.png.png" height="400"> |                                                                       |
 
 ## Screenshots
 
