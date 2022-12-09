@@ -26,7 +26,15 @@ The layout of the screens in both portrait and landscape orientations:
 
 The dark theme and portrait orientation:
 
+| main screen                                               | info screen                                              |
+|-----------------------------------------------------------|----------------------------------------------------------|
+| <img src="assets/screenshots/dark_main.jpg" height="300"> | <img src="assets/screenshots/dark_info.jpg" width="300"> |
+
 The light theme and landscape orientation:
+
+| main screen                                                | info screen                                               |
+|------------------------------------------------------------|-----------------------------------------------------------|
+| <img src="assets/screenshots/light_main.jpg" height="300"> | <img src="assets/screenshots/light_info.jpg" width="300"> |
 
 ## Topics of labs
 
