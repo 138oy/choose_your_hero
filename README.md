@@ -7,7 +7,7 @@ It's also been a great and easy project to try some of the essential Android dev
 
 ## What it does
 
-The app shows a list of Marvel heroes. The data is received from Marvel API.
+The app shows a list of Marvel heroes. The data is received from [Marvel API](https://developer.marvel.com/docs#!/public/getCreatorCollection_get_0).
 
 The main screen has a Marvel logo, a slogan and a carousel of the heroes. You can tap on the card to open the screen containing the information card (so that you can also read some tea about the hero you tapped on yay).
 
@@ -16,6 +16,11 @@ The app supports caching, light/dark theme, device orientation change, edge-to-e
 ## UI layout
 
 The layout of the screens in both portrait and landscape orientations:
+
+|             | Portrait                                                              | Landscape                                                        |
+|-------------|-----------------------------------------------------------------------|------------------------------------------------------------------|
+| main screen | <img src="assets/layout/PORTRAIT/choosing_screen.png" height="400">   | <assets/layout/LANDSCAPE/choosing_screen.png" height="400">      |
+| info screen | <img src="assets/layout/PORTRAIT/hero_ info_screen.png" height="400"> | <assets/layout/LANDSCAPE/hero_info_screen.png.png" height="400"> |                                                                       |
 
 ## Screenshots
 
@@ -35,7 +40,9 @@ The light theme and landscape orientation:
 
 ## How to run
 
+## How to send notifications
 
+https://fcm.googleapis.com/fcm/send
 
 ## Known issues
 
