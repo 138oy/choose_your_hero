@@ -60,6 +60,7 @@ The light theme and landscape orientation:
 "hash = ", 
 
 where hash equals md5 hash of timestamp(you may use just "1")+private key+public key (you better generate it online tbh)
+
 3. Sync project with the gradle files
 4. Connect your device or download an emulator
 5. Run -> Run 
@@ -78,7 +79,7 @@ where hash equals md5 hash of timestamp(you may use just "1")+private key+public
    |---------|------|
    |<img src="assets/notifications/1v9JcmJi7WE.jpg">|<img src="assets/notifications/H99RWmNpqns.jpg">|
 
-Don't forget to look up the id's on Marvel APIs!
+Don't forget to look up the ids on Marvel API!
 
 5. Hit the send button and you are done!
 
