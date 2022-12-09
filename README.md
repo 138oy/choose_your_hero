@@ -71,6 +71,7 @@ The light theme and landscape orientation:
    |<img src="assets/notifications/1v9JcmJi7WE.jpg">|<img src="assets/notifications/H99RWmNpqns.jpg">|
 
 Don't forget to look up the id's on Marvel APIs!
+
 5. Hit the send button and you are done!
 
 ## Known issues
