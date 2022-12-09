@@ -51,10 +51,18 @@ The light theme and landscape orientation:
 ## How to run
 
 0. You have to have Android Studio with Kotlin plugin installed
-1. Get the Marvel API apikey and create an apikey.properties file in the root directory containing fields: "publicKey = ", "privateKey = " and "hash = ", where hash equals md5 hash of timestamp(you may use just "1")+private key+public key (you better generate it online tbh)
-2. Sync project with the gradle files
-3. Connect your device or download an emulator
-4. Run -> Run 
+1. Get the Marvel API apikey and create an apikey.properties file in the root directory containing fields: 
+
+"publicKey = ", 
+
+"privateKey = " 
+
+"hash = ", 
+
+where hash equals md5 hash of timestamp(you may use just "1")+private key+public key (you better generate it online tbh)
+3. Sync project with the gradle files
+4. Connect your device or download an emulator
+5. Run -> Run 
 
 ## How to send notifications
 
@@ -65,7 +73,7 @@ The light theme and landscape orientation:
    | Headers | Body |
    |---------|------|
    |<img src="assets/notifications/XsZ_YB4GRjI.jpg">|<img src="assets/notifications/y72n23XH_do.jpg">|
-4. If you want to get notifications with random ids, leave it as it is. If you want to get notifications with the definite id via sending request, then do this in file PushNotificationService.kt:
+4. If you want to get notifications with random ids, leave it as it is. If you want to get notifications with the definite id sending it via request, then do this in file PushNotificationService.kt:
    | Now | Has to be |
    |---------|------|
    |<img src="assets/notifications/1v9JcmJi7WE.jpg">|<img src="assets/notifications/H99RWmNpqns.jpg">|
