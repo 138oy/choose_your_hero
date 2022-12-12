@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "923124078239",
+    "project_id": "chooseyourhero-30d68",
+    "storage_bucket": "chooseyourhero-30d68.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923124078239:android:88588aa42c64788d11f4aa",
+        "android_client_info": {
+          "package_name": "practice.effective.chooseyourhero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923124078239-dk4t990l4i1grvrm6jpsqafsg9tvdc3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3y7UJgYudIQWCRDOFATQWbxZCN0L4hxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923124078239-dk4t990l4i1grvrm6jpsqafsg9tvdc3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,40 +4,33 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
+import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
+import practice.effective.chooseyourhero.navigation.ChoosingAHero
 import practice.effective.chooseyourhero.ui.theme.ChooseYourHeroTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        FirebaseMessaging.getInstance().subscribeToTopic("all").addOnCompleteListener {}
         setContent {
             ChooseYourHeroTheme {
-                // A surface container using the 'background' color from the theme
+                val appState = rememberAppState()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    ChooseYourHeroNavHost(
+                        navController = appState.navController,
+                        startDestination = ChoosingAHero.route,
+                        appState
+                    )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ChooseYourHeroTheme {
-        Greeting("Android")
     }
 }
